@@ -1,6 +1,8 @@
 package com.teamtreehouse.service.resttemplate;
 
 import com.teamtreehouse.service.dto.Dto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -12,6 +14,9 @@ import java.util.Map;
 import static com.teamtreehouse.util.WebUtils.uriEncode;
 
 public abstract class RestApiService<T extends Dto> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestApiService.class);
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -57,6 +62,7 @@ public abstract class RestApiService<T extends Dto> {
                     .build()
                     .expand(params);
             String url = uriComponents.toUriString();
+            LOGGER.debug(String.format("Executing request for %s", url));
             return restTemplate.getForObject(url,getDtoClass());
         }
     }
