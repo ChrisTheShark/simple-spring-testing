@@ -35,7 +35,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
+        RestTemplate restTemplate = defaultRestTemplate();
+        restTemplate.setRequestFactory(clientHttpRequestFactory());
+        return restTemplate;
+    }
+
+    public static RestTemplate defaultRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
         ObjectMapper jacksonObjectMapper = new ObjectMapper();
 
         SimpleModule timestampModule = new SimpleModule("TimestampModule", new Version(1,0,0,null,null,null)).addDeserializer(Instant.class, new TimestampDeserializer());
